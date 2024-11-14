@@ -14,6 +14,7 @@ public class ProductItem {
     @SequenceGenerator(name = "productItemSequence", sequenceName = "_sequence_product_item", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productItemSequence")
     private Long id;
+    private Integer stock;
     private String variation;
 
     @ManyToOne

@@ -4,6 +4,9 @@ import com.ecommerce.inventory.models.Variation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface VariationRepository extends JpaRepository<Variation, Long> {
+    Optional<Variation> findByName(String name);
 }

@@ -80,8 +80,8 @@ public class DatabaseInit {
         products = productRepository.saveAll(products);
 
         List<ProductItem> productItems = List.of(
-                new ProductItem(1L, null, products.get(0)),
-                new ProductItem(2L, "COLOR:red", products.get(2))
+                new ProductItem(1L, 10, null, products.get(0)),
+                new ProductItem(2L, 15, "COLOR:red", products.get(2))
         );
         productItems = productItemRepository.saveAll(productItems);
 
