@@ -17,7 +17,6 @@ import java.util.List;
 public class DatabaseInit {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
-    private final ProductItemRepository productItemRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final VariationRepository variationRepository;
     private final VariationValueRepository variationValueRepository;
@@ -27,7 +26,6 @@ public class DatabaseInit {
         unitOfMeasureRepository.deleteAll();
         variationValueRepository.deleteAll();
         variationRepository.deleteAll();
-        productItemRepository.deleteAll();
         productRepository.deleteAll();
         categoryRepository.deleteAll();
 
@@ -72,18 +70,50 @@ public class DatabaseInit {
         ));
         categories = categoryRepository.saveAll(categories);
 
+        Product parentProduct = productRepository.save(
+                Product.builder()
+                        .name("Laptop")
+                        .description("Description of Laptop")
+                        .category(categories.get(2))
+                        .isParentProduct(true)
+                        .build());
+
         List<Product> products = List.of(
-                new Product(1L, "Asus Laptop", "Description of Asus Laptop", categories.get(2)),
-                new Product(2L, "Dell Laptop", "Description of Dell Laptop", categories.get(2)),
-                new Product(3L, "Bedroom Curtains", "Description of Bedroom Curtains", categories.get(4))
+                Product.builder()
+                        .name("Asus Laptop")
+                        .description("Description of Asus Laptop")
+                        .category(categories.get(2))
+                        .stock(10)
+                        .stockThreshold(5)
+                        .listingPrice(40000)
+                        .variation("COLOR:blue")
+                        .isParentProduct(false)
+                        .parentProduct(parentProduct)
+                        .build(),
+                Product.builder()
+                        .name("Dell Laptop")
+                        .description("Description of Dell Laptop")
+                        .category(categories.get(2))
+                        .stock(15)
+                        .stockThreshold(5)
+                        .listingPrice(35000)
+                        .variation("COLOR:red")
+                        .isParentProduct(false)
+                        .parentProduct(parentProduct)
+                        .build(),
+                Product.builder()
+                        .name("Asus Laptop")
+                        .description("Description of Asus Laptop")
+                        .category(categories.get(2))
+                        .stock(10)
+                        .stockThreshold(5)
+                        .listingPrice(40000)
+                        .variation("COLOR:blue")
+                        .isParentProduct(false)
+                        .parentProduct(null)
+                        .build()
         );
         products = productRepository.saveAll(products);
-
-        List<ProductItem> productItems = List.of(
-                new ProductItem(1L, 10, null, products.get(0)),
-                new ProductItem(2L, 15, "COLOR:red", products.get(2))
-        );
-        productItems = productItemRepository.saveAll(productItems);
 
     }
 }
