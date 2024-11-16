@@ -1,6 +1,7 @@
 package com.ecommerce.inventory.services;
 
 import com.ecommerce.inventory.enums.ProductType;
+import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
 import com.ecommerce.inventory.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.*;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ImageService imageService;
 
     public List<Product> arrangeProductsInHierarchy(List<Product> products) {
         Map<UUID, Product> productMap = new HashMap<>();
@@ -44,8 +46,14 @@ public class ProductService {
     public Product addProduct(Product product) {
         product.setProductType(ProductType.INDEPENDENT_PRODUCT);
         product.setParentProduct(null);
-        product.setChildProducts(null);
-        return productRepository.save(product);
+        product.setThumbnailUrl(product.getImages().get(0).getUrl());
+        Product savedProduct = productRepository.save(product);
+        List<Image> images = product.getImages();
+        for (Image image : images) {
+            image.setProductId(savedProduct.getId());
+        }
+        savedProduct.setImages(imageService.addImages(images));
+        return product;
     }
 
     public Product addParentProduct(Product product, Map<UUID, String> childProductIdToVariant) {

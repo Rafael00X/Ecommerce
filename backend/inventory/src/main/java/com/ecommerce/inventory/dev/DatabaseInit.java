@@ -5,6 +5,9 @@ import com.ecommerce.inventory.enums.UnitOfMeasureType;
 import com.ecommerce.inventory.enums.VariationType;
 import com.ecommerce.inventory.models.*;
 import com.ecommerce.inventory.repositories.*;
+import com.ecommerce.inventory.services.CategoryService;
+import com.ecommerce.inventory.services.ProductService;
+import com.ecommerce.inventory.services.UnitOfMeasureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -12,19 +15,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
 public class DatabaseInit {
-    private final CategoryRepository categoryRepository;
-    private final ProductRepository productRepository;
-    private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final VariationRepository variationRepository;
     private final VariationValueRepository variationValueRepository;
 
+    private final CategoryService categoryService;
+    private final ProductService productService;
+    private final UnitOfMeasureService unitOfMeasureService;
+
     @EventListener(ApplicationReadyEvent.class)
     public void initDB() {
+        // #################### Create Unit-Of-Measures ####################
+
         List<UnitOfMeasure> unitOfMeasures = List.of(
                 new UnitOfMeasure(null, UnitOfMeasureType.PIECE.name(), UnitOfMeasureType.PIECE.getCode()),
                 new UnitOfMeasure(null, UnitOfMeasureType.VOLUME_MILLILITRE.name(), UnitOfMeasureType.VOLUME_MILLILITRE.getCode()),
@@ -35,7 +41,9 @@ public class DatabaseInit {
                 new UnitOfMeasure(null, UnitOfMeasureType.LENGTH_CENTIMETRE.name(), UnitOfMeasureType.LENGTH_CENTIMETRE.getCode()),
                 new UnitOfMeasure(null, UnitOfMeasureType.LENGTH_METRE.name(), UnitOfMeasureType.LENGTH_METRE.getCode())
         );
-        unitOfMeasures = unitOfMeasureRepository.saveAll(unitOfMeasures);
+        unitOfMeasures = unitOfMeasureService.addUnitOfMeasures(unitOfMeasures);
+
+        // #################### Create variations ####################
 
         List<Variation> variations = List.of(
                 new Variation(null, VariationType.COLOR.name(), VariationType.COLOR.getCode()),
@@ -54,25 +62,26 @@ public class DatabaseInit {
         );
         variationValues = variationValueRepository.saveAll(variationValues);
 
-        List<Category> categories = new ArrayList<>(List.of(
+        // #################### Create categories ####################
+
+        List<Category> parentCategories = List.of(
                 new Category(null, "Electronics", null, true, null, null),
                 new Category(null, "Decoration", null, true, null, null)
-        ));
-        categories = categoryRepository.saveAll(categories);
-        categories.addAll(List.of(
-                new Category(null, "Laptops", null, false, categories.get(0), unitOfMeasures.get(0)),
-                new Category(null, "Televisions", null, false, categories.get(0), unitOfMeasures.get(0)),
-                new Category(null, "Curtains", VariationType.COLOR.getCode(), false, categories.get(1), unitOfMeasures.get(1))
-        ));
-        categories = categoryRepository.saveAll(categories);
+        );
+        parentCategories = parentCategories.stream().map(categoryService::addCategory).toList();
 
-        Product parentProduct = productRepository.save(
-                Product.builder()
-                        .name("Laptop")
-                        .description("Description of Laptop")
-                        .category(categories.get(2))
-                        .productType(ProductType.PARENT_PRODUCT)
-                        .build());
+        List<Category> childCategories = List.of(
+                new Category(null, "Laptops", VariationType.COLOR.getCode(), false, parentCategories.get(0), unitOfMeasures.get(0)),
+                new Category(null, "Televisions", null, false, parentCategories.get(0), unitOfMeasures.get(0)),
+                new Category(null, "Curtains", VariationType.COLOR.getCode(), false, parentCategories.get(1), unitOfMeasures.get(0))
+        );
+        childCategories = childCategories.stream().map(categoryService::addCategory).toList();
+
+        List<Category> categories = new ArrayList<>(parentCategories.size() + childCategories.size());
+        categories.addAll(parentCategories);
+        categories.addAll(childCategories);
+
+        // #################### Create products ####################
 
         List<Product> products = List.of(
                 Product.builder()
@@ -82,9 +91,7 @@ public class DatabaseInit {
                         .stock(10)
                         .stockThreshold(5)
                         .price(40000)
-                        .variant("COLOR:blue")
-                        .productType(ProductType.CHILD_PRODUCT)
-                        .parentProduct(parentProduct)
+                        .images(List.of(new Image(null, "https://dummyimage.com/600x400/000/fff", null, null)))
                         .build(),
                 Product.builder()
                         .name("Dell Laptop")
@@ -93,9 +100,7 @@ public class DatabaseInit {
                         .stock(15)
                         .stockThreshold(5)
                         .price(35000)
-                        .variant("COLOR:red")
-                        .productType(ProductType.CHILD_PRODUCT)
-                        .parentProduct(parentProduct)
+                        .images(List.of(new Image(null, "https://dummyimage.com/600x400/000/fff", null, null)))
                         .build(),
                 Product.builder()
                         .name("Bedroom Curtain")
@@ -104,12 +109,20 @@ public class DatabaseInit {
                         .stock(10)
                         .stockThreshold(5)
                         .price(300)
-                        .variant("COLOR:blue")
-                        .productType(ProductType.INDEPENDENT_PRODUCT)
-                        .parentProduct(null)
+                        .images(List.of(new Image(null, "https://dummyimage.com/600x400/000/fff", null, null)))
                         .build()
         );
-        products = productRepository.saveAll(products);
+        products = products.stream().map(productService::addProduct).toList();
+
+        Product parentProduct = productService.addParentProduct(Product.builder()
+                .name("Laptop")
+                .description("Description of Laptop")
+                .category(categories.get(2))
+                .productType(ProductType.PARENT_PRODUCT)
+                .build(), Map.of(
+                products.get(0).getId(), "COLOR:blue",
+                products.get(1).getId(), "COLOR:red"
+        ));
 
     }
 }

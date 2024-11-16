@@ -5,6 +5,7 @@ import com.ecommerce.inventory.dtos.AddProductRequestDto;
 import com.ecommerce.inventory.dtos.ProductResponseDto;
 import com.ecommerce.inventory.dtos.mappers.ProductResponseDtoMapper;
 import com.ecommerce.inventory.models.Category;
+import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
 import com.ecommerce.inventory.services.ProductService;
 import jakarta.validation.Valid;
@@ -34,6 +35,7 @@ public class ProductController {
                 .stockThreshold(dto.stockThreshold())
                 .price(dto.price())
                 .category(Category.builder().id(dto.categoryId()).build())
+                .images(dto.imageUrls().stream().map(url -> Image.builder().url(url).build()).toList())
                 .build();
 
         product = productService.addProduct(product);

@@ -2,13 +2,14 @@ package com.ecommerce.inventory.dtos;
 
 import jakarta.validation.constraints.*;
 
+import java.util.List;
 import java.util.UUID;
 
 public record AddProductRequestDto(
         @NotBlank(message = "Product name is required.")
         String name,
 
-        @Size(max = 1000, message = "Description cannot exceed 255 characters.")
+        @Size(max = 1000, message = "Description cannot exceed 1000 characters.")
         String description,
 
         @NotNull(message = "Stock is required.")
@@ -24,6 +25,9 @@ public record AddProductRequestDto(
         Integer price,
 
         @NotNull(message = "Category ID is required.")
-        @Positive(message = "Category ID must be a positive value.")
-        UUID categoryId
-) {}
+        UUID categoryId,
+
+        @Size(min = 1, message = "At least one image must be provided.")
+        List<String> imageUrls
+) {
+}
