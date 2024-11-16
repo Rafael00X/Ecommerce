@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class VariationService {
     private final VariationRepository variationRepository;
 
-    public Optional<Variation> getVariation(Long id) {
+    public Optional<Variation> getVariation(UUID id) {
         return variationRepository.findById(id);
     }
 
@@ -34,7 +35,7 @@ public class VariationService {
         return variationRepository.save(variation);
     }
 
-    public void deleteVariation(Long id) {
+    public void deleteVariation(UUID id) {
         variationRepository.deleteById(id);
     }
 }

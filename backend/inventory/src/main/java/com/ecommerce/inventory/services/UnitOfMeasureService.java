@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class UnitOfMeasureService {
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public Optional<UnitOfMeasure> getUnitOfMeasure(Long id) {
+    public Optional<UnitOfMeasure> getUnitOfMeasure(UUID id) {
         return unitOfMeasureRepository.findById(id);
     }
 
@@ -34,7 +35,7 @@ public class UnitOfMeasureService {
         return unitOfMeasureRepository.save(unitOfMeasure);
     }
 
-    public void deleteUnitOfMeasure(Long id) {
+    public void deleteUnitOfMeasure(UUID id) {
         unitOfMeasureRepository.deleteById(id);
     }
 }

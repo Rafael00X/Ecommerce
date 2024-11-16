@@ -2,18 +2,21 @@ package com.ecommerce.inventory.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Category {
     @Id
-    @SequenceGenerator(name = "categorySequence", sequenceName = "_sequence_category", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "categorySequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String variations;
     private Boolean hasChildCategory;

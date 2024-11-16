@@ -5,15 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class UnitOfMeasure {
     @Id
-    @SequenceGenerator(name = "unitOfMeasureSequence", sequenceName = "_sequence_unit_of_measure", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unitOfMeasureSequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String code;
 }

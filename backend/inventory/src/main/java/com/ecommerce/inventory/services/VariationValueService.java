@@ -6,13 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
 public class VariationValueService {
     private final VariationValueRepository variationValueRepository;
 
-    public List<VariationValue> getVariationValues(Long variationId) {
+    public List<VariationValue> getVariationValues(UUID variationId) {
         return variationValueRepository.findByVariationId(variationId);
     }
 
@@ -28,7 +29,7 @@ public class VariationValueService {
         return variationValueRepository.save(variationValue);
     }
 
-    public void deleteVariationValue(Long id) {
+    public void deleteVariationValue(UUID id) {
         variationValueRepository.deleteById(id);
     }
 }

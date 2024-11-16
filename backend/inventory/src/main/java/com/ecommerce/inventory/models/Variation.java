@@ -5,15 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Variation {
     @Id
-    @SequenceGenerator(name = "variationSequence", sequenceName = "_sequence_variation", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "variationSequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String code;
 }
