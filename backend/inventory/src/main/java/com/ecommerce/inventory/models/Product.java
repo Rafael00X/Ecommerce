@@ -20,26 +20,33 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private Integer stock;
-    private Integer stockThreshold;
     private Integer price;
-    private String variant;
-    private String thumbnailUrl;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ProductType productType;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "thumbnail_image_id", referencedColumnName = "id")
+    private Image thumbnailImage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 
     @Column(name = "parent_product_id", insertable = false, updatable = false)
     private UUID parentProductId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_product_id", referencedColumnName = "id")
     private Product parentProduct;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
 
     @Transient
     private List<Image> images;

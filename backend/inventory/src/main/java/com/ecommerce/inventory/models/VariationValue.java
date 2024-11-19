@@ -15,9 +15,11 @@ public class VariationValue {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String value;
 
-    @ManyToOne
-    @JoinColumn(name = "variation_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variation_id", referencedColumnName = "id", nullable = false)
     private Variation variation;
 }
