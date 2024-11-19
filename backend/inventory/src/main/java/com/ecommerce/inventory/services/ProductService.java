@@ -1,6 +1,6 @@
 package com.ecommerce.inventory.services;
 
-import com.ecommerce.inventory.enums.ProductType;
+import com.ecommerce.inventory.models.enums.ProductType;
 import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
 import com.ecommerce.inventory.repositories.ProductRepository;
@@ -44,9 +44,9 @@ public class ProductService {
     }
 
     public Product addProduct(Product product) {
-        product.setProductType(ProductType.INDEPENDENT_PRODUCT);
+        product.setProductType(ProductType.INDEPENDENT);
         product.setParentProduct(null);
-        product.setThumbnailUrl(product.getImages().get(0).getUrl());
+        product.setThumbnailImage(product.getImages().get(0));
         Product savedProduct = productRepository.save(product);
         List<Image> images = product.getImages();
         for (Image image : images) {

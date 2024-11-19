@@ -1,8 +1,8 @@
 package com.ecommerce.inventory.dev;
 
-import com.ecommerce.inventory.enums.ProductType;
-import com.ecommerce.inventory.enums.UnitOfMeasureType;
-import com.ecommerce.inventory.enums.VariationType;
+import com.ecommerce.inventory.models.enums.ProductType;
+import com.ecommerce.inventory.models.enums.UnitOfMeasureType;
+import com.ecommerce.inventory.models.enums.VariationType;
 import com.ecommerce.inventory.models.*;
 import com.ecommerce.inventory.repositories.*;
 import com.ecommerce.inventory.services.CategoryService;

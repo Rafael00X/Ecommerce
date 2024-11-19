@@ -1,4 +1,4 @@
-package com.ecommerce.inventory.enums;
+package com.ecommerce.inventory.models.enums;
 
 public enum CategoryType {
     ROOT,

@@ -1,6 +1,6 @@
 package com.ecommerce.inventory.models;
 
-import com.ecommerce.inventory.enums.ProductType;
+import com.ecommerce.inventory.models.enums.ProductType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

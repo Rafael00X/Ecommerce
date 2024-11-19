@@ -1,5 +1,6 @@
 package com.ecommerce.inventory.models;
 
+import com.ecommerce.inventory.models.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,10 @@ public class Image {
 
     @Column(nullable = false)
     private String url;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ImageType imageType;
 
     @Column(name = "product_id", insertable = false, updatable = false)
     private UUID productId;

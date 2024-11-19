@@ -1,6 +1,6 @@
 package com.ecommerce.inventory.services;
 
-import com.ecommerce.inventory.enums.UnitOfMeasureType;
+import com.ecommerce.inventory.models.enums.UnitOfMeasureType;
 import com.ecommerce.inventory.models.UnitOfMeasure;
 import com.ecommerce.inventory.repositories.UnitOfMeasureRepository;
 import lombok.RequiredArgsConstructor;

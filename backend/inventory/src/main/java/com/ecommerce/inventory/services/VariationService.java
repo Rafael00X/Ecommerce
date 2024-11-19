@@ -1,6 +1,6 @@
 package com.ecommerce.inventory.services;
 
-import com.ecommerce.inventory.enums.VariationType;
+import com.ecommerce.inventory.models.enums.VariationType;
 import com.ecommerce.inventory.models.Variation;
 import com.ecommerce.inventory.repositories.VariationRepository;
 import lombok.RequiredArgsConstructor;

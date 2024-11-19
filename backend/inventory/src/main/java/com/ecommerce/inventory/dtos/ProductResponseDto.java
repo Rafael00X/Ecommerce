@@ -1,6 +1,6 @@
 package com.ecommerce.inventory.dtos;
 
-import com.ecommerce.inventory.enums.ProductType;
+import com.ecommerce.inventory.models.enums.ProductType;
 
 import java.util.List;
 import java.util.UUID;

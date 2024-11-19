@@ -1,5 +1,0 @@
-package com.ecommerce.inventory.enums;
-
-public enum CategoryType {
-    TOP, INTERMEDIATE, TERMINAL
-}
