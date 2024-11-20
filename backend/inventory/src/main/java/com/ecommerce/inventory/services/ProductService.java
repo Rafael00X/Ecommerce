@@ -1,5 +1,6 @@
 package com.ecommerce.inventory.services;
 
+import com.ecommerce.inventory.models.ProductVariation;
 import com.ecommerce.inventory.models.enums.ProductType;
 import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
@@ -19,13 +20,13 @@ public class ProductService {
         Map<UUID, Product> productMap = new HashMap<>();
         List<Product> result = new ArrayList<>();
         for (Product product : products) {
-            if (product.getProductType() == ProductType.PARENT_PRODUCT) {
+            if (product.getProductType() == ProductType.PARENT) {
                 product.setChildProducts(new ArrayList<>());
                 productMap.put(product.getId(), product);
             }
         }
         for (Product product : products) {
-            if (product.getProductType() == ProductType.CHILD_PRODUCT) {
+            if (product.getProductType() == ProductType.CHILD) {
                 productMap.get(product.getParentProductId()).getChildProducts().add(product);
             } else {
                 result.add(product);
@@ -56,17 +57,27 @@ public class ProductService {
         return product;
     }
 
-    public Product addParentProduct(Product product, Map<UUID, String> childProductIdToVariant) {
-        product.setProductType(ProductType.PARENT_PRODUCT);
-        Product parentProduct = productRepository.save(product);
+    public Product addParentProduct(
+            Product parentProduct,
+            List<UUID> parentProductVariationIds,
+            List<UUID> childProductIds,
+            List<ProductVariation> childProductVariations) {
+        parentProduct.setProductType(ProductType.PARENT);
+        Product savedParentProduct = productRepository.save(parentProduct);
 
-        List<Product> childProducts = productRepository.findAllById(childProductIdToVariant.keySet());
+        List<ProductVariation> parentProductVariations = parentProductVariationIds.stream().map(
+                variationId -> ProductVariation.builder()
+                        .productId(savedParentProduct.getId())
+                        .variationId(variationId)
+                        .build()
+        ).toList();
+
+        List<Product> childProducts = productRepository.findAllById(childProductIds);
         List<Product> updatedChildProducts = new ArrayList<>(childProducts.size());
 
         for (Product childProduct : childProducts) {
             childProduct.setParentProduct(parentProduct);
-            childProduct.setProductType(ProductType.CHILD_PRODUCT);
-            childProduct.setVariant(childProductIdToVariant.get(childProduct.getId()));
+            childProduct.setProductType(ProductType.CHILD);
             updatedChildProducts.add(childProduct);
         }
 

@@ -30,6 +30,6 @@ public class Image {
     @Column(name = "product_id", insertable = false, updatable = false)
     private UUID productId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 }

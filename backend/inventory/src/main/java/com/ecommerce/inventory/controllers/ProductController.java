@@ -7,12 +7,15 @@ import com.ecommerce.inventory.dtos.mappers.ProductResponseDtoMapper;
 import com.ecommerce.inventory.models.Category;
 import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
+import com.ecommerce.inventory.models.ProductVariation;
 import com.ecommerce.inventory.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,7 +35,6 @@ public class ProductController {
                 .name(dto.name())
                 .description(dto.description())
                 .stock(dto.stock())
-                .stockThreshold(dto.stockThreshold())
                 .price(dto.price())
                 .category(Category.builder().id(dto.categoryId()).build())
                 .images(dto.imageUrls().stream().map(url -> Image.builder().url(url).build()).toList())
@@ -44,13 +46,30 @@ public class ProductController {
 
     @PostMapping("/add-parent-product")
     public Product addParentProduct(@Valid @RequestBody AddParentProductRequestDto dto) {
-        Product product = Product.builder()
+        Product parentProduct = Product.builder()
                 .name(dto.name())
-                .variant(dto.variant())
                 .category(Category.builder().id(dto.categoryId()).build())
                 .build();
 
-        return productService.addParentProduct(product, dto.childProductIdToVariant());
+        List<UUID> parentProductVariationIds = dto.variationIds();
+
+        List<UUID> childProductIds = new ArrayList<>();
+        List<ProductVariation> childProductVariations = new ArrayList<>();
+
+        dto.childProductIdToVariant().forEach((childProductId, variantList) -> {
+            childProductIds.add(childProductId);
+            variantList.forEach(variant -> {
+                childProductVariations.add(ProductVariation.builder()
+                        .productId(childProductId)
+                        .variationId(variant.variantId())
+                        .variationValueId(variant.variantValueId())
+                        .customVariationValue(variant.customVariantValue())
+                        .build());
+            });
+        });
+
+
+        return productService.addParentProduct(parentProduct, parentProductVariationIds, childProductIds, childProductVariations);
     }
 
 }

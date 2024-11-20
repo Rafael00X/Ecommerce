@@ -14,4 +14,5 @@ public class ProductVariationId implements Serializable {
     private UUID productId;
     private UUID variationId;
     private UUID variationValueId;
+    private String customVariationValue;
 }

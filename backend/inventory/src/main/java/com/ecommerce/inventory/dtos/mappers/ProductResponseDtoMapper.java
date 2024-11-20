@@ -10,11 +10,9 @@ public class ProductResponseDtoMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getStock(),
-                product.getStockThreshold(),
                 product.getPrice(),
-                product.getVariant(),
-                product.getThumbnailUrl(),
                 product.getProductType(),
+                product.getThumbnailImage(),
                 product.getChildProducts() == null ? null :
                         product.getChildProducts().stream()
                                 .map(ProductResponseDtoMapper::map)

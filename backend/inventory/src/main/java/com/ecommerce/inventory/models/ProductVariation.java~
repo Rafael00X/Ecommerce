@@ -20,19 +20,15 @@ import java.util.UUID;
 @Check(constraints = "NOT (variation_value_id IS NOT NULL AND custom_variation_value IS NOT NULL)")
 public class ProductVariation {
     @Id
-    @Column(name = "product_id")
     private UUID productId;
 
     @Id
-    @Column(name = "variation_id")
     private UUID variationId;
 
     @Id
-    @Column(name = "variation_value_id")
     private UUID variationValueId;
 
     @Id
-    @Column(name = "custom_variation_value")
     private String customVariationValue;
 
     @ManyToOne(fetch = FetchType.LAZY)

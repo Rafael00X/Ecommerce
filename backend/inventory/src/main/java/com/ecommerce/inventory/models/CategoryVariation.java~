@@ -18,11 +18,9 @@ import java.util.UUID;
 @IdClass(CategoryVariationId.class)
 public class CategoryVariation {
     @Id
-    @Column(name = "category_id")
     private UUID categoryId;
 
     @Id
-    @Column(name = "variation_id")
     private UUID variationId;
 
     @ManyToOne(fetch = FetchType.LAZY)

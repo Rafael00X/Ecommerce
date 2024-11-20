@@ -42,6 +42,11 @@ public class Product {
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
 
+    //    @Column(name = "product_variation_id", insertable = false, updatable = false)
+    //    private UUID productVariationId;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductVariation> productVariations;
+
     @Column(name = "parent_product_id", insertable = false, updatable = false)
     private UUID parentProductId;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,3 +59,5 @@ public class Product {
     @Transient
     private List<Product> childProducts;
 }
+
+// product.UKq7ho6ugqk6ifti809u48w9e2q

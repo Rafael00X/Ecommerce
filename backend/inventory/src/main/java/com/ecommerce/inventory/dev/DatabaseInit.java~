@@ -125,7 +125,7 @@ public class DatabaseInit {
                         .category(categories.get(2))
                         .stock(10)
                         .price(40000)
-                        .images(List.of(images.get(0)))
+                        .images(List.of(images.get(0), images.get(1), images.get(2)))
                         .build(),
                 Product.builder()
                         .name("Dell Laptop")
@@ -133,7 +133,7 @@ public class DatabaseInit {
                         .category(categories.get(2))
                         .stock(15)
                         .price(35000)
-                        .images(List.of(images.get(1)))
+                        .images(List.of(images.get(0), images.get(1), images.get(2)))
                         .build(),
                 Product.builder()
                         .name("Bedroom Curtain")
@@ -141,7 +141,7 @@ public class DatabaseInit {
                         .category(categories.get(2))
                         .stock(10)
                         .price(300)
-                        .images(List.of(images.get(2)))
+                        .images(List.of(images.get(0), images.get(1), images.get(2)))
                         .build()
         );
         products = products.stream().map(productService::addProduct).toList();

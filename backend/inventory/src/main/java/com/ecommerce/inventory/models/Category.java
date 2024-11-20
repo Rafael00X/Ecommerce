@@ -27,7 +27,7 @@ public class Category {
     private CategoryType categoryType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uom_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "uom_id", referencedColumnName = "id")
     private UnitOfMeasure unitOfMeasure;
 
     @Column(name = "parent_category_id", insertable = false, updatable = false)
