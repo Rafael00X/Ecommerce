@@ -34,16 +34,17 @@ public class Product {
     @Column(nullable = false)
     private ProductType productType;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @Column(name = "thumbnail_image_id", insertable = false, updatable = false)
+    private UUID thumbnailImageId;
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_image_id", referencedColumnName = "id")
     private Image thumbnailImage;
 
+    @Column(name = "category_id", insertable = false, updatable = false)
+    private UUID categoryId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
     private Category category;
-
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<ProductVariation> productVariations;
 
     @Column(name = "parent_product_id", insertable = false, updatable = false)
     private UUID parentProductId;
@@ -51,9 +52,13 @@ public class Product {
     @JoinColumn(name = "parent_product_id", referencedColumnName = "id")
     private Product parentProduct;
 
-    @Transient
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> images;
 
-    @Transient
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductVariation> productVariations;
+
+    @OneToMany(mappedBy = "parentProduct", fetch = FetchType.LAZY)
     private List<Product> childProducts;
+
 }

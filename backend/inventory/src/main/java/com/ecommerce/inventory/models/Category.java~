@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -38,4 +39,10 @@ public class Category {
     @JoinColumn(name = "parent_category_id", referencedColumnName = "id")
     private Category parentCategory;
 
+    public enum Field {
+        unitOfMeasure,
+        parentCategory
+    }
+
+    private Map<Field, Boolean> fetchFields;
 }
