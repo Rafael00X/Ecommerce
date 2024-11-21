@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductVariationService productVariationService;
     private final ImageService imageService;
 
     public List<Product> arrangeProductsInHierarchy(List<Product> products) {
@@ -65,23 +67,26 @@ public class ProductService {
         parentProduct.setProductType(ProductType.PARENT);
         Product savedParentProduct = productRepository.save(parentProduct);
 
+        List<Product> childProducts = productRepository.findAllById(childProductIds);
+        childProducts.forEach(childProduct -> {
+            childProduct.setParentProduct(parentProduct);
+            childProduct.setProductType(ProductType.CHILD);
+        });
+        List<Product> updatedChildProducts = productRepository.saveAll(childProducts);
+
         List<ProductVariation> parentProductVariations = parentProductVariationIds.stream().map(
                 variationId -> ProductVariation.builder()
                         .productId(savedParentProduct.getId())
                         .variationId(variationId)
                         .build()
         ).toList();
+        List<ProductVariation> productVariationList = Stream.concat(
+                parentProductVariations.stream(),
+                childProductVariations.stream()
+        ).toList();
+        productVariationList = productVariationService.addProductVariations(productVariationList);
 
-        List<Product> childProducts = productRepository.findAllById(childProductIds);
-        List<Product> updatedChildProducts = new ArrayList<>(childProducts.size());
 
-        for (Product childProduct : childProducts) {
-            childProduct.setParentProduct(parentProduct);
-            childProduct.setProductType(ProductType.CHILD);
-            updatedChildProducts.add(childProduct);
-        }
-
-        updatedChildProducts = productRepository.saveAll(updatedChildProducts);
         parentProduct.setChildProducts(updatedChildProducts);
         return parentProduct;
     }

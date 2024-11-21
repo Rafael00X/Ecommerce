@@ -1,11 +1,11 @@
 package com.ecommerce.inventory.dtos.mappers;
 
-import com.ecommerce.inventory.dtos.ImageResponseDto;
+import com.ecommerce.inventory.dtos.ImageDto;
 import com.ecommerce.inventory.models.Image;
 
-public class ImageResponseDtoMapper {
-    public static ImageResponseDto map(Image image) {
-        return new ImageResponseDto(
+public class ImageDtoMapper {
+    public static ImageDto map(Image image) {
+        return new ImageDto(
                 image.getId(),
                 image.getUrl(),
                 image.getImageType(),

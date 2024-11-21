@@ -4,7 +4,7 @@ import com.ecommerce.inventory.models.enums.ImageType;
 
 import java.util.UUID;
 
-public record ImageResponseDto(
+public record ImageDto(
         UUID id,
         String url,
         ImageType imageType,

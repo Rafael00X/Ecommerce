@@ -2,8 +2,8 @@ package com.ecommerce.inventory.controllers;
 
 import com.ecommerce.inventory.dtos.AddParentProductRequestDto;
 import com.ecommerce.inventory.dtos.AddProductRequestDto;
-import com.ecommerce.inventory.dtos.ProductResponseDto;
-import com.ecommerce.inventory.dtos.mappers.ProductResponseDtoMapper;
+import com.ecommerce.inventory.dtos.ProductDto;
+import com.ecommerce.inventory.dtos.mappers.ProductDtoMapper;
 import com.ecommerce.inventory.models.Category;
 import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;
@@ -24,13 +24,13 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/")
-    public List<ProductResponseDto> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         List<Product> products = productService.getAllProducts();
-        return products.stream().map(ProductResponseDtoMapper::map).toList();
+        return products.stream().map(ProductDtoMapper::map).toList();
     }
 
     @PostMapping("/")
-    public ProductResponseDto addProduct(@Valid @RequestBody AddProductRequestDto dto) {
+    public ProductDto addProduct(@Valid @RequestBody AddProductRequestDto dto) {
         Product product = Product.builder()
                 .name(dto.name())
                 .description(dto.description())
@@ -41,7 +41,7 @@ public class ProductController {
                 .build();
 
         product = productService.addProduct(product);
-        return ProductResponseDtoMapper.map(product);
+        return ProductDtoMapper.map(product);
     }
 
     @PostMapping("/add-parent-product")
