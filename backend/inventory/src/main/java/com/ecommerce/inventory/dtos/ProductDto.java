@@ -1,6 +1,5 @@
 package com.ecommerce.inventory.dtos;
 
-import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.enums.ProductType;
 
 import java.util.List;
@@ -13,9 +12,10 @@ public record ProductDto(
         Integer stock,
         Integer price,
         ProductType productType,
-        Image thumbnailImage,
+        ImageDto thumbnailImage,
+        CategoryDto category,
+        List<ImageDto> images,
         List<ProductVariationDto> productVariations,
-        List<ProductDto> childProducts,
-        List<ImageDto> images
+        List<ProductDto> childProducts
 ) {
 }

@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -36,7 +38,7 @@ public class Product {
 
     @Column(name = "thumbnail_image_id", insertable = false, updatable = false)
     private UUID thumbnailImageId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "thumbnail_image_id", referencedColumnName = "id")
     private Image thumbnailImage;
 
@@ -60,5 +62,41 @@ public class Product {
 
     @OneToMany(mappedBy = "parentProduct", fetch = FetchType.LAZY)
     private List<Product> childProducts;
+
+    public enum Field {
+        THUMBNAIL_IMAGE,
+        CATEGORY,
+        IMAGES,
+        PRODUCT_VARIATIONS,
+        CHILD_PRODUCTS
+    }
+
+    @Builder.Default
+    public final Set<Field> includedFields = new HashSet<>(Set.of(Field.THUMBNAIL_IMAGE));
+
+    public Image getThumbnailImage() {
+        includedFields.add(Field.THUMBNAIL_IMAGE);
+        return thumbnailImage;
+    }
+
+    public Category getCategory() {
+        includedFields.add(Field.CATEGORY);
+        return category;
+    }
+
+    public List<Image> getImages() {
+        includedFields.add(Field.IMAGES);
+        return images;
+    }
+
+    public List<ProductVariation> getProductVariations() {
+        includedFields.add(Field.PRODUCT_VARIATIONS);
+        return productVariations;
+    }
+
+    public List<Product> getChildProducts() {
+        includedFields.add(Field.CHILD_PRODUCTS);
+        return childProducts;
+    }
 
 }

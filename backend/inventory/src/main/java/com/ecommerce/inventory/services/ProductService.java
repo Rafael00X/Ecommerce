@@ -38,7 +38,13 @@ public class ProductService {
     }
 
     public Optional<Product> getProduct(UUID id) {
-        return productRepository.findById(id);
+        Optional<Product> optionalResult = productRepository.findById(id);
+        if (optionalResult.isEmpty()) return optionalResult;
+        Product result = optionalResult.get();
+        if (result.getProductType() == ProductType.PARENT) {
+            result.getChildProducts();
+        }
+        return optionalResult;
     }
 
     public List<Product> getAllProducts() {

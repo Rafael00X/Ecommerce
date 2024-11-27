@@ -1,26 +1,32 @@
 package com.ecommerce.inventory.dtos.mappers;
 
-import com.ecommerce.inventory.dtos.ProductResponseDto;
+import com.ecommerce.inventory.dtos.ProductDto;
 import com.ecommerce.inventory.models.Product;
 
-public class ProductResponseDtoMapper {
-    public static ProductResponseDto map(Product product) {
-        return new ProductResponseDto(
+public class ProductDtoMapper {
+    public static ProductDto map(Product product) {
+        return new ProductDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
                 product.getStock(),
                 product.getPrice(),
                 product.getProductType(),
-                product.getThumbnailImage(),
-                product.getChildProducts() == null ? null :
-                        product.getChildProducts().stream()
-                                .map(ProductResponseDtoMapper::map)
-                                .toList(),
-                product.getImages() == null ? null :
+                product.getIncludedFields().contains(Product.Field.THUMBNAIL_IMAGE) ? ImageDtoMapper.map(product.getThumbnailImage()) : null,
+//                product.getIncludedFields().contains(Product.Field.CATEGORY) ? CategoryDtoMapper.map(product.getCategory()) : null,
+                null,
+                product.getIncludedFields().contains(Product.Field.IMAGES) ?
                         product.getImages().stream()
-                                .map(ImageResponseDtoMapper::map)
-                                .toList()
+                                .map(ImageDtoMapper::map)
+                                .toList() : null,
+                product.getIncludedFields().contains(Product.Field.PRODUCT_VARIATIONS) ?
+                        product.getProductVariations().stream()
+                                .map(ProductVariationDtoMapper::map)
+                                .toList() : null,
+                product.getIncludedFields().contains(Product.Field.CHILD_PRODUCTS) ?
+                        product.getChildProducts().stream()
+                                .map(ProductDtoMapper::map)
+                                .toList() : null
         );
     }
 }
