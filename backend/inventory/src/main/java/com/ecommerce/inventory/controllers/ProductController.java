@@ -1,9 +1,10 @@
 package com.ecommerce.inventory.controllers;
 
+
 import com.ecommerce.inventory.dtos.AddParentProductRequestDto;
 import com.ecommerce.inventory.dtos.AddProductRequestDto;
-import com.ecommerce.inventory.dtos.ProductDto;
-import com.ecommerce.inventory.dtos.mappers.ProductDtoMapper;
+import com.ecommerce.inventory.dtos.entity.ProductDto;
+import com.ecommerce.inventory.dtos.entity.mappers.ProductDtoMapper;
 import com.ecommerce.inventory.models.Category;
 import com.ecommerce.inventory.models.Image;
 import com.ecommerce.inventory.models.Product;

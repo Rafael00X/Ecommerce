@@ -1,6 +1,7 @@
-package com.ecommerce.inventory.dtos.mappers;
+package com.ecommerce.inventory.dtos.entity.mappers;
 
-import com.ecommerce.inventory.dtos.ImageDto;
+
+import com.ecommerce.inventory.dtos.entity.ImageDto;
 import com.ecommerce.inventory.models.Image;
 
 public class ImageDtoMapper {

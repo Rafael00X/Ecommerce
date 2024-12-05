@@ -1,10 +1,12 @@
-package com.ecommerce.inventory.dtos.mappers;
+package com.ecommerce.inventory.dtos.entity.mappers;
 
-import com.ecommerce.inventory.dtos.ProductDto;
+
+import com.ecommerce.inventory.dtos.entity.ProductDto;
 import com.ecommerce.inventory.models.Product;
 
 public class ProductDtoMapper {
     public static ProductDto map(Product product) {
+        if (product == null) return null;
         return new ProductDto(
                 product.getId(),
                 product.getName(),

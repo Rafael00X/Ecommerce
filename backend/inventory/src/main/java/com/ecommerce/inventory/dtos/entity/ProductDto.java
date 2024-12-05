@@ -1,4 +1,4 @@
-package com.ecommerce.inventory.dtos;
+package com.ecommerce.inventory.dtos.entity;
 
 import com.ecommerce.inventory.models.enums.ProductType;
 
